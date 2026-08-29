@@ -1,5 +1,5 @@
 from fastapi import APIRouter, File, Header, HTTPException, UploadFile, status
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, StreamingResponse
 import httpx
 
 from app.config import Settings
@@ -32,3 +32,15 @@ async def upload_file(
         raise HTTPException(status_code=response.status_code, detail=response.text)
 
     return JSONResponse(status_code=response.status_code, content=response.json())
+
+
+@router.get("/media/{filename}")
+async def get_media(filename: str):
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        response = await client.get(f"{settings.media_service_url}/media/{filename}")
+    if response.is_error:
+        raise HTTPException(status_code=response.status_code, detail="File not found")
+    return StreamingResponse(
+        iter([response.content]),
+        media_type=response.headers.get("content-type", "application/octet-stream"),
+    )
