@@ -13,7 +13,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {children}
+        <footer style={{ textAlign: "center", padding: "8px", fontSize: "12px", color: "#751010" }}>
+          © 2026, Netiks Store or its affiliates. All rights reserved.
+        </footer>
+      </body>
     </html>
   );
 }
