@@ -1,8 +1,7 @@
+import httpx
+from app.config import Settings
 from fastapi import APIRouter, HTTPException, Request, status
 from fastapi.responses import JSONResponse
-import httpx
-
-from app.config import Settings
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 settings = Settings()

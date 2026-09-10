@@ -1,5 +1,5 @@
-from fastapi import HTTPException, Request, status
 import httpx
+from fastapi import HTTPException, Request, status
 
 from app.config import Settings
 

@@ -82,6 +82,7 @@ source = { editable = "services/catalog-service" }
 dependencies = [
     { name = "alembic" },
     { name = "fastapi" },
+    { name = "httpx" },
     { name = "netiks-shared" },
     { name = "psycopg", extra = ["binary"] },
     { name = "sqlalchemy" },
@@ -92,6 +93,7 @@ dependencies = [
 requires-dist = [
     { name = "alembic", specifier = ">=1.16.2,<2.0.0" },
     { name = "fastapi", specifier = ">=0.116.0,<1.0.0" },
+    { name = "httpx", specifier = ">=0.28.1,<1.0.0" },
     { name = "netiks-shared", editable = "packages/shared-python" },
     { name = "psycopg", extras = ["binary"], specifier = ">=3.2.9,<4.0.0" },
     { name = "sqlalchemy", specifier = ">=2.0.41,<3.0.0" },
@@ -175,6 +177,7 @@ dependencies = [
     { name = "httpx" },
     { name = "netiks-shared" },
     { name = "pydantic-settings" },
+    { name = "python-multipart" },
     { name = "uvicorn", extra = ["standard"] },
 ]
 
@@ -184,6 +187,7 @@ requires-dist = [
     { name = "httpx", specifier = ">=0.28.1,<1.0.0" },
     { name = "netiks-shared", editable = "packages/shared-python" },
     { name = "pydantic-settings", specifier = ">=2.10.1,<3.0.0" },
+    { name = "python-multipart", specifier = ">=0.0.20,<1.0.0" },
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.35.0,<1.0.0" },
 ]
 
@@ -940,6 +944,7 @@ version = "0.1.0"
 source = { editable = "services/vendor-service" }
 dependencies = [
     { name = "alembic" },
+    { name = "email-validator" },
     { name = "fastapi" },
     { name = "netiks-shared" },
     { name = "psycopg", extra = ["binary"] },
@@ -950,6 +955,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "alembic", specifier = ">=1.16.2,<2.0.0" },
+    { name = "email-validator", specifier = ">=2.2.0,<3.0.0" },
     { name = "fastapi", specifier = ">=0.116.0,<1.0.0" },
     { name = "netiks-shared", editable = "packages/shared-python" },
     { name = "psycopg", extras = ["binary"], specifier = ">=3.2.9,<4.0.0" },

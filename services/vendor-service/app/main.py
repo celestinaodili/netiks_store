@@ -1,8 +1,8 @@
 from fastapi import FastAPI
+from netiks_shared.health import health_router
 
 from app import models  # noqa: F401
 from app.routes import router as store_router
-from netiks_shared.health import health_router
 
 app = FastAPI(title="Netiks Store Vendor Service", version="0.1.0")
 

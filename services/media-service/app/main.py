@@ -2,9 +2,9 @@ from mimetypes import guess_type
 
 from fastapi import FastAPI, File, UploadFile, status
 from fastapi.responses import FileResponse
+from netiks_shared.health import health_router
 
 from app.service import list_uploads, resolve_upload, save_upload
-from netiks_shared.health import health_router
 
 app = FastAPI(title="Netiks Store Media Service", version="0.1.0")
 

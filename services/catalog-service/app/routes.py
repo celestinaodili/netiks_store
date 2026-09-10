@@ -18,8 +18,8 @@ from app.service import (
     create_category_service,
     create_product_service,
     get_product_by_slug_service,
-    list_orders_service,
     list_categories_service,
+    list_orders_service,
     list_products_service,
     update_product_service,
 )

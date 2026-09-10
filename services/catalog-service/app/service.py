@@ -6,7 +6,6 @@ from sqlalchemy.orm import Session
 
 from app.models import Category, Order, Product
 from app.repository import (
-    create_order,
     create_category,
     create_product,
     get_category_by_id,
@@ -14,8 +13,8 @@ from app.repository import (
     get_product_by_id,
     get_product_by_id_for_update,
     get_product_by_slug,
-    list_orders_by_owner,
     list_categories,
+    list_orders_by_owner,
     list_products_by_owner,
     list_published_products,
     update_product,

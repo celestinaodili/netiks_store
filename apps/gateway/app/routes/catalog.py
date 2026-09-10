@@ -1,11 +1,10 @@
 from urllib.parse import urlencode
 
-from fastapi import APIRouter, HTTPException, Request
-from fastapi.responses import JSONResponse
 import httpx
-
 from app.config import Settings
 from app.deps import extract_user_context_from_request
+from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import JSONResponse
 
 router = APIRouter(tags=["catalog"])
 settings = Settings()

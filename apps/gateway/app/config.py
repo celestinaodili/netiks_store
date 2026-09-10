@@ -1,6 +1,5 @@
-from pydantic import Field
-
 from netiks_shared.config import CommonSettings
+from pydantic import Field
 
 
 class Settings(CommonSettings):
