@@ -58,7 +58,7 @@ jobs:
         include:
           - service: web
             path: infra/docker/web.Dockerfile
-            context: apps/web
+            context: .
           - service: gateway
             path: apps/gateway/Dockerfile
             context: .
