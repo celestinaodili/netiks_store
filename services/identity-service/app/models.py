@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import ClassVar
 from uuid import uuid4
 
 from sqlalchemy import Boolean, DateTime, ForeignKey, String, Text, func
@@ -9,7 +10,7 @@ from app.database import Base
 
 class User(Base):
     __tablename__ = "users"
-    __table_args__ = {"schema": "identity"}
+    __table_args__: ClassVar[dict] = {"schema": "identity"}
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid4()))
     full_name: Mapped[str] = mapped_column(String(120), nullable=False)
@@ -33,7 +34,7 @@ class User(Base):
 
 class AuthSession(Base):
     __tablename__ = "auth_sessions"
-    __table_args__ = {"schema": "identity"}
+    __table_args__: ClassVar[dict] = {"schema": "identity"}
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid4()))
     user_id: Mapped[str] = mapped_column(

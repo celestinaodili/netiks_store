@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import ClassVar
 from uuid import uuid4
 
 from sqlalchemy import DateTime, String, func
@@ -9,7 +10,7 @@ from app.database import Base
 
 class Store(Base):
     __tablename__ = "stores"
-    __table_args__ = {"schema": "vendor"}
+    __table_args__: ClassVar[dict] = {"schema": "vendor"}
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid4()))
     owner_id: Mapped[str] = mapped_column(String(36), nullable=False, index=True)

@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import ClassVar
 from uuid import uuid4
 
 from sqlalchemy import DateTime, ForeignKey, Integer, Numeric, String, Text, func
@@ -9,7 +10,7 @@ from app.database import Base
 
 class Category(Base):
     __tablename__ = "categories"
-    __table_args__ = {"schema": "catalog"}
+    __table_args__: ClassVar[dict] = {"schema": "catalog"}
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid4()))
     name: Mapped[str] = mapped_column(String(120), nullable=False, unique=True)
@@ -27,7 +28,7 @@ class Category(Base):
 
 class Product(Base):
     __tablename__ = "products"
-    __table_args__ = {"schema": "catalog"}
+    __table_args__: ClassVar[dict] = {"schema": "catalog"}
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid4()))
     store_id: Mapped[str] = mapped_column(String(36), nullable=False, index=True)
@@ -62,7 +63,7 @@ class Product(Base):
 
 class Order(Base):
     __tablename__ = "orders"
-    __table_args__ = {"schema": "catalog"}
+    __table_args__: ClassVar[dict] = {"schema": "catalog"}
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid4()))
     product_id: Mapped[str] = mapped_column(
