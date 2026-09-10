@@ -1,0 +1,123 @@
+name: Build and Push
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*.*.*"]
+  pull_request:
+    branches: [main]
+
+env:
+  REGISTRY: ${{ vars.ACR_LOGIN_SERVER }}
+
+jobs:
+  validate:
+    name: Validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python lint dependencies
+        run: pip install ruff
+
+      - name: Lint Python services
+        run: ruff check .
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: package-lock.json
+
+      - name: Install web app dependencies
+        run: npm ci
+
+      - name: Lint web application
+        run: npm run lint:web
+
+      - name: Validate Docker Compose configuration
+        run: docker compose -f docker-compose.yml config --quiet
+
+  build-and-push:
+    name: Build and Push (${{ matrix.service }})
+    needs: validate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write   # required for OIDC federation to Azure
+
+    strategy:
+      matrix:
+        include:
+          - service: web
+            path: infra/docker/web.Dockerfile
+            context: apps/web
+          - service: gateway
+            path: apps/gateway/Dockerfile
+            context: .
+          - service: identity-service
+            path: services/identity-service/Dockerfile
+            context: .
+          - service: vendor-service
+            path: services/vendor-service/Dockerfile
+            context: .
+          - service: catalog-service
+            path: services/catalog-service/Dockerfile
+            context: .
+          - service: media-service
+            path: services/media-service/Dockerfile
+            context: .
+          - service: admin-service
+            path: services/admin-service/Dockerfile
+            context: .
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Azure (OIDC — no client secret)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Log in to Azure Container Registry
+        run: az acr login --name "${ACR_LOGIN_SERVER%%.*}"
+        env:
+          ACR_LOGIN_SERVER: ${{ vars.ACR_LOGIN_SERVER }}
+
+      - name: Determine image tags
+        id: tags
+        run: |
+          TAGS="${{ env.REGISTRY }}/${{ matrix.service }}:${{ github.sha }}"
+          if [ "${{ github.ref_type }}" = "tag" ]; then
+            TAGS="${TAGS}
+          ${{ env.REGISTRY }}/${{ matrix.service }}:${{ github.ref_name }}
+          ${{ env.REGISTRY }}/${{ matrix.service }}:latest"
+          fi
+          {
+            echo "tags<<EOF"
+            echo "$TAGS"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./${{ matrix.context }}
+          file: ./${{ matrix.path }}
+          push: true
+          tags: ${{ steps.tags.outputs.tags }}
+          cache-from: type=gha,scope=${{ matrix.service }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.service }}
