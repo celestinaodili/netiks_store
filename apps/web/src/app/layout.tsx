@@ -15,8 +15,8 @@ export default function RootLayout({
     <html lang="en">
       <body>
         {children}
-        <footer style={{ textAlign: "center", padding: "8px", fontSize: "12px", color: "#751010" }}>
-          © 2026, Netiks Store or its affiliates. All rights reserved.
+        <footer style={{ textAlign: "center", padding: "8px", fontSize: "15px", color: "#2b1313" }}>
+          © 2026, Netiks Store. All rights reserved.
         </footer>
       </body>
     </html>
