@@ -1,15 +1,15 @@
 services:
   web:
-    image:  testacr32.azurecr.io/netiks-store/web:v1.1.0
+    image:  netiksstoreregistry734.azurecr.io/netiks-store/web:v1.0.0
   gateway:
-    image: testacr32.azurecr.io/netiks-store/gateway:v1.0.0
+    image: netiksstoreregistry734.azurecr.io/netiks-store/gateway:v1.0.0
   identity-service:
-    image: testacr32.azurecr.io/netiks-store/identity-service:v1.0.0
+    image: netiksstoreregistry734.azurecr.io/netiks-store/identity-service:v1.0.0
   vendor-service:
-    image: testacr32.azurecr.io/netiks-store/vendor-service:v1.0.0
+    image: netiksstoreregistry734.azurecr.io/netiks-store/vendor-service:v1.0.0
   catalog-service:
-    image: testacr32.azurecr.io/netiks-store/catalog-service:v1.0.0
+    image: netiksstoreregistry734.azurecr.io/netiks-store/catalog-service:v1.0.0
   media-service:
-    image: testacr32.azurecr.io/netiks-store/media-service:v1.0.0
+    image: netiksstoreregistry734.azurecr.io/netiks-store/media-service:v1.0.0
   admin-service:
-    image: testacr32.azurecr.io/netiks-store/admin-service:v1.0.0
+    image: netiksstoreregistry734.azurecr.io/netiks-store/admin-service:v1.0.0
