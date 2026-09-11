@@ -18,7 +18,7 @@ export default async function MarketPage() {
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#907314]">Live Marketplace</p>
             <h1 className="mt-3 max-w-3xl text-[2rem] font-semibold leading-[1.05] tracking-[-0.05em] text-[#141413] md:text-[3rem]">
-              Public products that shoppers can explore and buy immediately.
+              Public products that shoppers can view and buy immediately.
             </h1>
             <p className="mt-4 max-w-2xl text-sm leading-7 text-[var(--muted)] md:text-base">{status}</p>
           </div>
