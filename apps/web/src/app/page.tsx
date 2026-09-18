@@ -89,7 +89,7 @@ export default async function Home() {
 
         <section className="border-t border-[var(--line)] py-10">
           <SectionHeading
-            title="Why Shoppers Choose Netiks Store"
+            title="Why Shoppers Choose Netiks Store for a Great Experience"
             description="A smooth shopping experience from discovery through checkout."
           />
           <div className="grid gap-5 md:grid-cols-3">
