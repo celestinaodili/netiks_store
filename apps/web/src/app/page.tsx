@@ -74,7 +74,7 @@ export default async function Home() {
         <section className="py-10">
           <SectionHeading
             title="Live Products"
-            description="Fresh arrivals and bestsellers from stores currently selling on Netiks Store."
+            description="New arrivals from bestsellers currently selling on Netiks Store."
           />
           <div className="grid gap-x-5 gap-y-8 md:grid-cols-2 xl:grid-cols-4">
             {products.length === 0 ? (
@@ -89,7 +89,7 @@ export default async function Home() {
 
         <section className="border-t border-[var(--line)] py-10">
           <SectionHeading
-            title="Why Shoppers Choose Netiks Store for a Great Experience"
+            title="Why Shoppers Choose Netiks Store"
             description="A smooth shopping experience from discovery through checkout."
           />
           <div className="grid gap-5 md:grid-cols-3">
