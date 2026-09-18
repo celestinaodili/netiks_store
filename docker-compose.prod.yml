@@ -2,7 +2,7 @@ services:
   web:
     image:  netiksstoreregistry734.azurecr.io/netiks-store/web:v1.2.0
   gateway:
-    image: netiksstoreregistry734.azurecr.io/netiks-store/gateway:v1.2.0
+    image: netiksstoreregistry734.azurecr.io/netiks-store/gateway:v1.0.0
   identity-service:
     image: netiksstoreregistry734.azurecr.io/netiks-store/identity-service:v1.0.0
   vendor-service:
