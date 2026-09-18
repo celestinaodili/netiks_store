@@ -13,6 +13,7 @@ jobs:
   validate:
     name: Validate
     runs-on: ubuntu-latest
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -50,9 +51,10 @@ jobs:
     name: Build and Push (${{ matrix.service }})
     needs: validate
     runs-on: ubuntu-latest
+
     permissions:
       contents: read
-      id-token: write   # required for OIDC federation to Azure
+      id-token: write
 
     strategy:
       matrix:
@@ -60,21 +62,27 @@ jobs:
           - service: web
             path: infra/docker/web.Dockerfile
             context: .
+
           - service: gateway
             path: apps/gateway/Dockerfile
             context: .
+
           - service: identity-service
             path: services/identity-service/Dockerfile
             context: .
+
           - service: vendor-service
             path: services/vendor-service/Dockerfile
             context: .
+
           - service: catalog-service
             path: services/catalog-service/Dockerfile
             context: .
+
           - service: media-service
             path: services/media-service/Dockerfile
             context: .
+
           - service: admin-service
             path: services/admin-service/Dockerfile
             context: .
@@ -86,7 +94,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Log in to Azure #(OIDC — no client secret)
+      - name: Log in to Azure
         uses: azure/login@v2
         with:
           client-id: ${{ vars.AZURE_CLIENT_ID }}
@@ -101,12 +109,14 @@ jobs:
       - name: Determine image tags
         id: tags
         run: |
-          TAGS="${{ env.REGISTRY }}/${{ matrix.service }}:${{ github.sha }}"
+          TAGS="${{ env.REGISTRY }}/netiks-store/${{ matrix.service }}:${{ github.sha }}"
+
           if [ "${{ github.ref_type }}" = "tag" ]; then
             TAGS="${TAGS}
-          ${{ env.REGISTRY }}/${{ matrix.service }}:${{ github.ref_name }}
-          ${{ env.REGISTRY }}/${{ matrix.service }}:latest"
+          ${{ env.REGISTRY }}/netiks-store/${{ matrix.service }}:${{ github.ref_name }}
+          ${{ env.REGISTRY }}/netiks-store/${{ matrix.service }}:latest"
           fi
+
           {
             echo "tags<<EOF"
             echo "$TAGS"
@@ -137,8 +147,14 @@ jobs:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
+
           script: |
             set -e
+
+            az login --identity --output none
+
+            az acr login --name "${{ vars.ACR_LOGIN_SERVER }}" 2>/dev/null \
+              || az acr login --name "$(echo ${{ vars.ACR_LOGIN_SERVER }} | cut -d. -f1)"
 
             cd ~/netiks_store
 
