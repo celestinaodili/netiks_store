@@ -140,6 +140,59 @@ jobs:
           cache-from: type=gha,scope=${{ matrix.service }}
           cache-to: type=gha,mode=max,scope=${{ matrix.service }}
 
+  deploy-staging:
+    name: Deploy to Staging
+    needs: [build-and-push]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: staging
+
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+
+          script: |
+            set -e
+
+            az login --identity --output none
+
+            az acr login --name "${{ vars.ACR_LOGIN_SERVER }}" 2>/dev/null \
+              || az acr login --name "$(echo ${{ vars.ACR_LOGIN_SERVER }} | cut -d. -f1)"
+
+            cd /home/deploy/netiks_store-staging
+
+            git fetch origin main
+            git checkout --force main
+            git reset --hard origin/main
+
+            export IMAGE_TAG="${{ github.sha }}"
+            export REGISTRY="${{ vars.ACR_LOGIN_SERVER }}/netiks-store"
+
+            docker compose \
+              -p netiks_staging \
+              --env-file .env \
+              -f docker-compose.yml \
+              -f docker-compose.staging.yml \
+              pull
+
+            docker compose \
+              -p netiks_staging \
+              --env-file .env \
+              -f docker-compose.yml \
+              -f docker-compose.staging.yml \
+              up -d
+
+            docker compose \
+              -p netiks_staging \
+              --env-file .env \
+              -f docker-compose.yml \
+              -f docker-compose.staging.yml \
+              ps
+
   deploy:
     name: Deploy to Production
     needs: [build-and-push]
