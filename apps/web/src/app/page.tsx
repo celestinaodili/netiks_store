@@ -26,6 +26,13 @@ export default async function Home() {
               Discover products from independent sellers, explore product details, and place orders with a smooth checkout experience.
               Sellers can create a store, publish products, and track sales from the dashboard.
             </p>
+            <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#907314]">Netiks Store</p>
+            <h2 className="mt-3 max-w-3xl text-[2.2rem] font-semibold leading-[1.05] tracking-[-0.05em] text-[#141413] md:text-[3.4rem]">
+              Become a seller.
+            </h2>
+            <p className="mt-4 max-w-2xl text-sm leading-7 text-[var(--muted)] md:text-base">
+              Sellers can register, create a store publish products, and track sales from the dashboard.
+            </p>
           </div>
 
           <SiteNav current="home" user={user} />
