@@ -25,3 +25,11 @@ variable "subnet_address_prefixes" {
 variable "nsg_name" {
   type = string
 }
+
+variable "public_ip_name" {
+  type = string
+}
+
+variable "nic_name" {
+  type = string
+}

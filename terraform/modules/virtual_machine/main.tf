@@ -3,6 +3,7 @@ resource "azurerm_linux_virtual_machine" "netiks_vm" {
   resource_group_name = var.resource_group_name
   location            = var.location
   size                = var.vm_size
+  bypass_platform_safety_checks_on_user_schedule_enabled = true
 
   admin_username                  = var.admin_username
   disable_password_authentication = true
@@ -42,12 +43,5 @@ resource "azurerm_linux_virtual_machine" "netiks_vm" {
 
   identity {
     type = "SystemAssigned"
-  }
-
-  lifecycle {
-    ignore_changes = [
-      admin_username,
-      admin_ssh_key
-    ]
   }
 }

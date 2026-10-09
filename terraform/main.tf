@@ -8,6 +8,8 @@ module "network" {
   subnet_name             = var.subnet_name
   subnet_address_prefixes = var.subnet_address_prefixes
   nsg_name                = var.nsg_name
+  public_ip_name          = var.public_ip_name
+  nic_name                = var.nic_name
 }
 
 module "virtual_machine" {
@@ -21,7 +23,7 @@ module "virtual_machine" {
 
   admin_username       = var.admin_username
   admin_ssh_public_key = var.admin_ssh_public_key
-  network_interface_id = var.network_interface_id
+  network_interface_id = module.network.network_interface_id
 
   image_publisher = var.image_publisher
   image_offer     = var.image_offer

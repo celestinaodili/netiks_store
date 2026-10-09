@@ -21,11 +21,11 @@ resource "azuread_application_federated_identity_credential" "main" {
 
 resource "azuread_application_federated_identity_credential" "tag_v1_1_0" {
   application_id = "/applications/${var.application_id}"
-  display_name   = "federated-credential"
-  description    = "federated-credential for release tag v1.1.0"
-  audiences      = ["api://AzureADTokenExchange"]
-  issuer         = "https://token.actions.githubusercontent.com"
-  subject        = "repo:celestinaodili@{Organization ID}/netiks_store@{Repository ID}:ref:refs/tags/v1.1.0"
+  display_name = "federated-credential-tag-v1-1-0"
+  description  = "GitHub Actions federation for release tag v1.1.0"
+  audiences = ["api://AzureADTokenExchange"]
+  issuer    = "https://token.actions.githubusercontent.com"
+  subject   = "repo:celestinaodili/netiks_store:ref:refs/tags/v1.1.0"
 }
 
 resource "azuread_application_federated_identity_credential" "tag_v1_2_0" {

@@ -15,16 +15,10 @@ variable "vm_size" {
 }
 
 variable "admin_username" {
-  type      = string
-  sensitive = true
+  type = string
 }
 
 variable "admin_ssh_public_key" {
-  type      = string
-  sensitive = true
-}
-
-variable "network_interface_id" {
   type = string
 }
 
@@ -69,6 +63,14 @@ variable "subnet_address_prefixes" {
 }
 
 variable "nsg_name" {
+  type = string
+}
+
+variable "public_ip_name" {
+  type = string
+}
+
+variable "nic_name" {
   type = string
 }
 
