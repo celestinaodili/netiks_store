@@ -44,4 +44,11 @@ resource "azurerm_linux_virtual_machine" "netiks_vm" {
   identity {
     type = "SystemAssigned"
   }
+
+  lifecycle {
+    ignore_changes = [
+      admin_ssh_key
+  ]
+}
+
 }
