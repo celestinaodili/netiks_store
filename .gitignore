@@ -32,3 +32,6 @@ terraform/.terraformrc
 terraform/terraform.rc
 plan.json
 tfplan
+# kubernetes
+k8s/*secret*.yaml
+!k8s/02-secret.example.yaml
