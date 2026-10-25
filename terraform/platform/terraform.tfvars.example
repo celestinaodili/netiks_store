@@ -1,0 +1,23 @@
+environments = {
+  staging = {
+    namespace = "netiks-staging"
+
+    quota = {
+      requests_cpu    = "REPLACE_WITH_STAGING_CPU_REQUEST_QUOTA"
+      requests_memory = "REPLACE_WITH_STAGING_MEMORY_REQUEST_QUOTA"
+      limits_memory   = "REPLACE_WITH_STAGING_MEMORY_LIMIT_QUOTA"
+      pods            = "REPLACE_WITH_STAGING_POD_QUOTA"
+    }
+  }
+
+  production = {
+    namespace = "netiks-production"
+
+    quota = {
+      requests_cpu    = "REPLACE_WITH_PRODUCTION_CPU_REQUEST_QUOTA"
+      requests_memory = "REPLACE_WITH_PRODUCTION_MEMORY_REQUEST_QUOTA"
+      limits_memory   = "REPLACE_WITH_PRODUCTION_MEMORY_LIMIT_QUOTA"
+      pods            = "REPLACE_WITH_PRODUCTION_POD_QUOTA"
+    }
+  }
+}

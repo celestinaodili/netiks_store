@@ -1,0 +1,82 @@
+{{- range $key, $service := .Values.services }}
+{{- if has $key (list "catalog" "identity" "vendor" "admin") }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $service.name }}
+  labels:
+    app: {{ $service.name }}
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: {{ $service.port }}
+      targetPort: {{ $service.port }}
+  selector:
+    app: {{ $service.name }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $service.name }}
+  labels:
+    app: {{ $service.name }}
+spec:
+  replicas: {{ $service.replicas }}
+  selector:
+    matchLabels:
+      app: {{ $service.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ $service.name }}
+    spec:
+      enableServiceLinks: false
+      {{- if $service.database }}
+      initContainers:
+        - name: wait-for-postgres
+          image: {{ $.Values.postgres.image | quote }}
+          command:
+            - sh
+            - -c
+            - until pg_isready -h postgres -p 5432; do echo waiting for postgres; sleep 2; done
+          resources:
+            {{- toYaml $.Values.resources.initContainer | nindent 12 }}
+      {{- end }}
+      containers:
+        - name: {{ $service.name }}
+          image: "{{ $.Values.image.repository }}/{{ $service.name }}:{{ $.Values.image.tag }}"
+          imagePullPolicy: {{ $.Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ $service.port }}
+          env:
+            - name: APP_NAME
+              value: {{ $service.name | quote }}
+            - name: APP_PORT
+              value: {{ $service.port | quote }}
+          envFrom:
+            - configMapRef:
+                name: netiks-config
+            - secretRef:
+                name: netiks-secrets
+          startupProbe:
+            httpGet:
+              path: /health/live
+              port: {{ $service.port }}
+            periodSeconds: 3
+            failureThreshold: 30
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: {{ $service.port }}
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: {{ $service.port }}
+            periodSeconds: 5
+          resources:
+            {{- toYaml $.Values.resources.backend | nindent 12 }}
+{{- end }}
+{{- end }}

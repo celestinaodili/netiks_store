@@ -1,0 +1,90 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: media-service
+  labels:
+    app: media-service
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 8004
+      targetPort: 8004
+  selector:
+    app: media-service
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: media-uploads
+  labels:
+    app: media-service
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: media-service
+  labels:
+    app: media-service
+spec:
+  replicas: {{ .Values.services.media.replicas }}
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: media-service
+  template:
+    metadata:
+      labels:
+        app: media-service
+    spec:
+      enableServiceLinks: false
+      containers:
+        - name: media-service
+          image: "{{ .Values.image.repository }}/media-service:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 8004
+          env:
+            - name: APP_NAME
+              value: media-service
+            - name: APP_PORT
+              value: "8004"
+            - name: UPLOAD_DIR
+              value: /app/uploads
+          envFrom:
+            - configMapRef:
+                name: netiks-config
+            - secretRef:
+                name: netiks-secrets
+          startupProbe:
+            httpGet:
+              path: /health/live
+              port: 8004
+            periodSeconds: 3
+            failureThreshold: 30
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 8004
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 8004
+            periodSeconds: 5
+          resources:
+            {{- toYaml .Values.resources.backend | nindent 12 }}
+          volumeMounts:
+            - name: uploads
+              mountPath: /app/uploads
+      volumes:
+        - name: uploads
+          persistentVolumeClaim:
+            claimName: media-uploads

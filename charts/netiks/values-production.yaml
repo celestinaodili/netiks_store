@@ -1,0 +1,17 @@
+serviceExposure:
+  nodePortsEnabled: false
+services:
+  catalog:
+    replicas: 1
+  identity:
+    replicas: 1
+  vendor:
+    replicas: 1
+  admin:
+    replicas: 1
+  media:
+    replicas: 1
+  gateway:
+    replicas: 2
+  web:
+    replicas: 2

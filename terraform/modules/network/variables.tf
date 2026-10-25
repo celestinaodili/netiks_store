@@ -33,3 +33,9 @@ variable "public_ip_name" {
 variable "nic_name" {
   type = string
 }
+
+variable "ssh_allowed_cidrs" {
+  description = "CIDR ranges allowed to access SSH."
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+}

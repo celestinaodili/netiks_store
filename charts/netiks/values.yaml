@@ -1,0 +1,94 @@
+serviceExposure:
+  nodePortsEnabled: true
+nameOverride: ""
+fullnameOverride: ""
+
+image:
+  repository: netiks
+  tag: v1
+  pullPolicy: IfNotPresent
+
+services:
+  catalog:
+    name: catalog-service
+    port: 8003
+    replicas: 1
+    database: true
+
+  identity:
+    name: identity-service
+    port: 8001
+    replicas: 1
+    database: true
+
+  vendor:
+    name: vendor-service
+    port: 8002
+    replicas: 1
+    database: true
+
+  admin:
+    name: admin-service
+    port: 8005
+    replicas: 1
+    database: false
+
+  media:
+    name: media-service
+    port: 8004
+    replicas: 1
+    database: false
+
+  gateway:
+    name: gateway
+    port: 8000
+    replicas: 2
+    database: false
+    tag: ""
+
+  web:
+    name: web
+    port: 3000
+    replicas: 2
+    database: false
+
+postgres:
+  image: postgres:16-alpine
+  replicas: 1
+  storage: 1Gi
+
+resources:
+  initContainer:
+    requests:
+      cpu: 10m
+      memory: 16Mi
+    limits:
+      memory: 32Mi
+
+  backend:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      memory: 256Mi
+
+  gateway:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      memory: 512Mi
+
+  web:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      memory: 1Gi
+
+  postgres:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      memory: 512Mi
